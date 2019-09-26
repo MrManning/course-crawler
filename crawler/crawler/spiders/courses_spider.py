@@ -3,7 +3,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
-# from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerProcess
 import crawler.items as items
 
 
@@ -13,7 +13,7 @@ class CoursesSpider(CrawlSpider):
     start_urls = ['https://essex.ac.uk/subjects/']
 
     rules = (
-        Rule(LinkExtractor(allow='subjects/'), callback="parse_subject", follow=True)
+        Rule(LinkExtractor(allow=("subjects/")), callback="parse_subject", follow=True)
     )
 
     def parse_subject(self, response):
@@ -26,3 +26,8 @@ class CoursesSpider(CrawlSpider):
 
     def parse_course(self):
         pass
+
+
+# process = CrawlerProcess()
+# process.crawl(CoursesSpider)
+# process.start()
