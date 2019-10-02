@@ -22,4 +22,4 @@ class CourseItems(scrapy.Item):
     location = scrapy.Field()
     options = scrapy.Field()
     duration = scrapy.Field()
-
+    level = scrapy.Field()
