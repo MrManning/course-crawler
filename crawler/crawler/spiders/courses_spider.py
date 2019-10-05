@@ -17,9 +17,10 @@ class CoursesSpider(CrawlSpider):
     )
 
     # setting the location of the output csv file
-    # custom_settings = {
-    #     'FEED_URI': 'tmp/courses.json'
-    # }
+    custom_settings = {
+        'FEED_URI': 'tmp/courses.json',
+        'FEED_FORMAT': 'JSON'
+    }
 
     def parse_subject(self, response):
         sel = Selector(response)
@@ -27,16 +28,18 @@ class CoursesSpider(CrawlSpider):
             subject_item = items.SubjectItems()
             subject_item['subject'] = subject.css('div.subject__title::text').get()
             subject_item['link'] = subject.css('a::attr(href)').get()
-            yield subject_item
-            # yield scrapy.Request(subject_item['link'], self.parse_course, meta={'subject_item': subject_item})
+            subject_item['courses'] = []
+
+            next_url = response.urljoin(subject_item['link'])
+            yield scrapy.Request(next_url, callback=self.parse_course, meta={'subject_item': subject_item})
 
     def parse_course(self, response):
         subject_item = response.meta['subject_item']
         sel = Selector(response)
-        all_courses = []
 
-        for course in sel.css('div[class="grid__item"]'):
-            course_title = course.css('h3::text').strip().split(" ", 1)
+        check = sel.xpath('//div[@id="related-courses-UG"]')
+        for course in check.xpath('.//div[@class="grid__item"]'):
+            course_title = course.css('h3::text').get().strip().split(" ", 1)
 
             course_item = items.CourseItems()
             course_item['name'] = course_title[1]
@@ -46,7 +49,7 @@ class CoursesSpider(CrawlSpider):
             # course_item['location'] =
             # course_item['options'] =
             # course_item['duration'] =
-            all_courses.append(course_item)
 
-        subject_item['courses'] = [dict(all_courses)]
-        yield subject_item
+            subject_item['courses'].append(course_item)
+
+        return subject_item
