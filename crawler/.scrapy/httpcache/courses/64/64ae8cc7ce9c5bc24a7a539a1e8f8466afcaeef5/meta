@@ -1,1 +1,0 @@
-{'url': 'https://www.essex.ac.uk/api/sitecore/subject/GetRelatedCourses?page=6&studylevel=UG&subjectareaid=045bede1-f3a6-4ced-827f-4b6f0b0dab1c', 'method': 'GET', 'status': 200, 'response_url': 'https://www.essex.ac.uk/api/sitecore/subject/GetRelatedCourses?page=6&studylevel=UG&subjectareaid=045bede1-f3a6-4ced-827f-4b6f0b0dab1c', 'timestamp': 1570497307.636628}
