@@ -9,6 +9,7 @@ import scrapy
 
 
 class SubjectItems(scrapy.Item):
+    count = scrapy.Field()
     subject = scrapy.Field()
     link = scrapy.Field()
     courses = scrapy.Field()
