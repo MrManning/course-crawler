@@ -23,7 +23,7 @@ FEED_STORAGES = {
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'crawler (+http://www.yourdomain.com)'
+USER_AGENT = 'crawler (https://github.com/MrManning/course-crawler)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
