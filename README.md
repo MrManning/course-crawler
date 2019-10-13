@@ -81,4 +81,4 @@ The scraped courses will be located inside `course-crawler/build/courses.json`
 
 
 ## License
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](License.txt) file for more information.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for more information.
