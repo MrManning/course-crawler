@@ -29,14 +29,17 @@ scrapy crawl courses
 
 The scraped courses will be located inside `course-crawler/crawler/tmp/courses.json`
 
+
 ## TODO
+- [X] Fix bug which stops crawler running infinitely
+- [X] Retrieve all courses under degree type including courses hidden behind API call
+- [X] Make second depth a recursive method for courses hidden behind the API call
 - [ ] Add repo license
 - [ ] Reach a depth of 3 to retrieve more course information
 - [ ] Extract courses from each degree type (Undergraduate, Postgraduate, Research)
-- [ ] Retrieve all courses under degree type including courses hidden behind JavaScript
 - [ ] Update README.md to add project badges
 - [ ] Add unit tests
-- [ ] Implement caching to avoid potentially being blocked
+- [ ] Implement caching to avoid potentially being blocked and increase performance time
 
 ## Potential TODO
 - [ ] Main loop to start the crawler

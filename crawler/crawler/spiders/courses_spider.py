@@ -24,10 +24,10 @@ class CoursesSpider(CrawlSpider):
         for subject in sel.css('div[class^="grid__item"]'):
             self.count = self.count + 1
             subject_item = items.SubjectItems()
+            subject_item['count'] = self.count
             subject_item['subject'] = subject.css('div.subject__title::text').get()
             subject_item['link'] = subject.css('a::attr(href)').get()
             subject_item['courses'] = []
-            subject_item['count'] = self.count
 
             next_url = response.urljoin(subject_item['link'])
             yield scrapy.Request(next_url, callback=self.parse_course, meta={'subject_item': subject_item})
@@ -35,56 +35,28 @@ class CoursesSpider(CrawlSpider):
     def parse_course(self, response):
         subject_item = response.meta['subject_item']
         sel = Selector(response)
-
         degree_types = [sel.xpath('//div[@id="related-courses-UG"]')]
-        # , sel.xpath('//div[@id="related-courses-PGT"]')]
 
-        for type in degree_types:
+        for index, type in enumerate(degree_types):
             for course in type.xpath('.//div[@class="grid__item"]'):
                 course_title = course.css('h3::text').get().strip().split(" ", 1)
 
                 course_item = items.CourseItems()
                 course_item['name'] = course_title[1]
                 course_item['degree_type'] = course_title[0]
-                course_item['link'] = "course_count"
+                course_item['link'] = "load_more_link"
 
                 subject_item['courses'].append(course_item)
+
 
             load_more_link = type.xpath('.//div[@id="load-more"]//a[contains(@href, "GetRelatedCourses")]/@href').get()
-            has_link = True
-            while has_link:
-                if load_more_link:
-                    next_url = response.urljoin(load_more_link)
-                    yield scrapy.Request(next_url, method="GET", callback=self.parse_course, meta={'subject_item': subject_item})
+            if load_more_link is not None:
+                next_url = response.urljoin(load_more_link)
+                yield scrapy.Request(next_url, callback=self.parse_course, meta={'subject_item': subject_item})
+            else:
+                yield subject_item
 
-                    load_more_link = type.xpath('.//div[@id="load-more"]//a[contains(@href, "GetRelatedCourses")]/@href').get()
-                else:
-                    has_link = False
-
-        #     # course_count = type.xpath('.//strong/text()').get()
-        #     # course_count = course_count.strip('()') if course_count is not None else course_count
-
-        yield subject_item
-
-    def parse_test(self, response):
-        subject_item = response.meta['subject_item']
-        sel = Selector(response)
-        degree_types = [sel.xpath('//div[@id="related-courses-UG"]')]
-        for type in degree_types:
-            for course in type.xpath('.//div[@class="grid__item"]'):
-                course_title = course.css('h3::text').get().strip().split(" ", 1)
-
-                course_item = items.CourseItems()
-                course_item['name'] = course_title[1]
-                course_item['degree_type'] = course_title[0]
-                course_item['link'] = "course_count"
-
-                subject_item['courses'].append(course_item)
-
-        return subject_item
-
-
-
+        return
 
 
 class CustomFeedStorage(FileFeedStorage):
