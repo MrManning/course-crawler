@@ -34,16 +34,16 @@ The scraped courses will be located inside `course-crawler/crawler/tmp/courses.j
 - [X] Fix bug which stops crawler running infinitely
 - [X] Retrieve all courses under degree type including courses hidden behind API call
 - [X] Make second depth a recursive method for courses hidden behind the API call
-- [ ] Add repo license
 - [ ] Reach a depth of 3 to retrieve more course information
 - [ ] Extract courses from each degree type (Undergraduate, Postgraduate, Research)
-- [ ] Update README.md to add project badges
 - [ ] Add unit tests
 - [ ] Implement caching to avoid potentially being blocked and increase performance time
 
 ## Potential TODO
 - [ ] Main loop to start the crawler
 - [ ] Ability to set output file
+- [ ] Update README.md to include more project badges
+- [ ] Add repository license
 
 [Scrapy]: https://github.com/scrapy/scrapy
 [Python]: https://www.python.org/
