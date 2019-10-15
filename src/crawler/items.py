@@ -17,10 +17,9 @@ class SubjectItems(scrapy.Item):
 
 class CourseItems(scrapy.Item):
     name = scrapy.Field()
-    link = scrapy.Field()
     degree_type = scrapy.Field()
+    link = scrapy.Field()
     study_mode = scrapy.Field()
     location = scrapy.Field()
     options = scrapy.Field()
     duration = scrapy.Field()
-    level = scrapy.Field()
