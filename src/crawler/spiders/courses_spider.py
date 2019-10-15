@@ -10,11 +10,12 @@ from scrapy.linkextractors import LinkExtractor
 class CoursesSpider(CrawlSpider):
     """
 
-    :param name:
-    :param allowed_domains:
-    :param start_urls:
-    :param count:
-    :param rules:
+    Attributes:
+        name:
+        allowed_domains:
+        start_urls:
+        count:
+        rules:
     """
 
     name = 'courses'
@@ -27,12 +28,16 @@ class CoursesSpider(CrawlSpider):
     )
 
     def parse_subject(self, response):
-        """
+        """Gets a subject from the University of Essex
 
-        :param self:
-        :type self: CoursesSpider
-        :param response:
-        :type response: Response
+        Args:
+            response:
+
+        Returns:
+
+        Raises:
+            ValueError: An error occurs if the xpath expression is invalid
+            NameError: An error occurs if variable is called without being defined
         """
 
         for subject in response.xpath('//div[starts-with(@class, "grid__item")]'):
@@ -47,12 +52,16 @@ class CoursesSpider(CrawlSpider):
             yield scrapy.Request(next_url, callback=self.parse_course, meta={'subject_item': subject_item})
 
     def parse_course(self, response):
-        """
+        """Gets a course from the University of Essex
 
-        :param self:
-        :type self: CoursesSpider
-        :param response:
-        :type response: Response
+        Args:
+            response:
+
+        Returns:
+
+        Raises:
+            ValueError: An error occurs if the xpath expression is invalid
+            NameError: An error occurs if variable is called without being defined
         """
 
         subject_item = response.meta['subject_item']
