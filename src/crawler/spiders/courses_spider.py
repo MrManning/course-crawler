@@ -5,7 +5,6 @@ import crawler.helper_functions as helper
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from scrapy.selector import Selector
 
 
 class CoursesSpider(CrawlSpider):
@@ -36,8 +35,7 @@ class CoursesSpider(CrawlSpider):
         :type response: Response
         """
 
-        sel = Selector(response)
-        for subject in sel.xpath('//div[starts-with(@class, "grid__item")]'):
+        for subject in response.xpath('//div[starts-with(@class, "grid__item")]'):
             self.count = self.count + 1
             subject_item = items.SubjectItems()
             subject_item['count'] = self.count
@@ -58,8 +56,7 @@ class CoursesSpider(CrawlSpider):
         """
 
         subject_item = response.meta['subject_item']
-        sel = Selector(response)
-        degree_types = [sel.xpath('//div[@id="related-courses-UG"]'),]
+        degree_types = [response.xpath('//div[@id="related-courses-UG"]'),]
         # sel.xpath('//div[@id="related-courses-PG"]')]
 
         for index, type in enumerate(degree_types):
