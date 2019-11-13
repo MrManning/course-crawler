@@ -11,11 +11,11 @@ class CoursesSpider(CrawlSpider):
     """
 
     Attributes:
-        name:
-        allowed_domains:
-        start_urls:
-        count:
-        rules:
+        name: A string representing what the spider is called.
+        allowed_domains: A list of URLs the spider is allowed to crawl.
+        start_urls: The initial URL the spider starts crawling from.
+        count: The amount of subjects crawled.
+        rules: Determines which URLs the spider can/cannot crawl.
     """
 
     name = 'courses'
@@ -31,9 +31,7 @@ class CoursesSpider(CrawlSpider):
         """Gets a subject from the University of Essex
 
         Args:
-            response:
-
-        Returns:
+            response: Represents a HTTP response (a page).
 
         Raises:
             ValueError: An error occurs if the xpath expression is invalid
@@ -55,7 +53,7 @@ class CoursesSpider(CrawlSpider):
         """Gets a course from the University of Essex
 
         Args:
-            response:
+            response: Represents a HTTP response (a page).
 
         Returns:
 
@@ -65,11 +63,10 @@ class CoursesSpider(CrawlSpider):
         """
 
         subject_item = response.meta['subject_item']
-        degree_types = [response.xpath('//div[@id="related-courses-UG"]'),]
-        # sel.xpath('//div[@id="related-courses-PG"]')]
+        degree_types = [response.xpath('//div[@id="related-courses-UG"]'), response.xpath('//div[@id="related-courses-PGT"]'),]
 
-        for index, type in enumerate(degree_types):
-            for course in type.xpath('.//div[@class="grid__item"]'):
+        for index, degree in enumerate(degree_types, 1):
+            for course in degree.xpath('.//div[@class="grid__item"]'):
                 course_title = course.css('h3::text').get().strip().split(" ", 1)
 
                 course_item = items.CourseItems()
@@ -86,11 +83,12 @@ class CoursesSpider(CrawlSpider):
                 subject_item['courses'][helper.get_degree_type(index)].append(course_item)
 
 
-            load_more_link = type.xpath('.//div[@id="load-more"]//a[contains(@href, "GetRelatedCourses")]/@href').get()
+            load_more_link = degree.xpath('.//div[@id="load-more"]//a[contains(@href, "GetRelatedCourses")]/@href').get()
             if load_more_link is not None:
                 next_url = response.urljoin(load_more_link)
                 yield scrapy.Request(next_url, callback=self.parse_course, meta={'subject_item': subject_item})
             else:
-                yield subject_item
+                if len(degree_types) == index and load_more_link is None:
+                    yield subject_item
 
         return
